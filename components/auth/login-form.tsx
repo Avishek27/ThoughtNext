@@ -1,6 +1,7 @@
 "use client"
 
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 import CardWrapper from "./card-wrapper";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,9 @@ import FormSuccess from "./form-success";
 import { Button } from "../ui/button";
 
 const LoginForm = () => {
-    
+   
+    const searchParams = useSearchParams();
+    const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email is already in use with different provider" : "";
 
     const [isPending,startTransition] = useTransition();
     const [success,setSuccess] = useState<string | undefined>("");
@@ -86,7 +89,7 @@ const LoginForm = () => {
                    >
 
                    </FormField>
-                   <FormError label={error}/>
+                   <FormError label={error || urlError}/>
                    <FormSuccess label={success}/>
                    <Button variant={"default"} className="w-full curor-pointer" type="submit" size={"lg"}>Log In</Button>
                 </form>
